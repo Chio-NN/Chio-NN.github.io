@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>http://localhost:4000/posts/T1/</loc>
+<lastmod>2026-09-24T21:00:00-03:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/categories/</loc>
+<lastmod>2026-09-25T06:29:43-03:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/tags/</loc>
+<lastmod>2026-09-25T06:29:43-03:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/archives/</loc>
+<lastmod>2026-09-25T06:29:43-03:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/about/</loc>
+<lastmod>2026-09-25T06:29:43-03:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/tags/orquesta-de-laptops/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/categories/orquesta-de-laptops/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/hola.html</loc>
+<lastmod>2026-09-25T06:17:56-03:00</lastmod>
+</url>
+</urlset>

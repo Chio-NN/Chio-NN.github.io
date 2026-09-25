@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cinco materiales sonoros — The Dawn of Computer Music (Mov. II)</title>
+<style>
+  :root{
+    --sky1:#bfe6f7; --sky2:#eef9fd; --ink:#123047; --muted:#4d6a7f;
+    --glass:rgba(255,255,255,.6); --glass-edge:rgba(255,255,255,.85);
+    --shadow:rgba(30,90,120,.18);
+    --whistle:#4fb8e0; --bell:#7fc94a; --walkie:#f0a154; --storm:#7690a8; --drip:#2fb6a5;
+    --btn1:#3aa6c9; --btn2:#1c6f8c;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --sky1:#0d2333; --sky2:#123449; --ink:#eaf6fb; --muted:#9fc1d4;
+      --glass:rgba(20,45,65,.55); --glass-edge:rgba(255,255,255,.15);
+      --shadow:rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --sky1:#0d2333; --sky2:#123449; --ink:#eaf6fb; --muted:#9fc1d4;
+    --glass:rgba(20,45,65,.55); --glass-edge:rgba(255,255,255,.15);
+    --shadow:rgba(0,0,0,.4);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  body{
+    margin:0; background:linear-gradient(180deg,var(--sky1),var(--sky2)) fixed;
+    color:var(--ink); font-family:"Trebuchet MS",Verdana,system-ui,sans-serif;
+    padding:calc(22px + env(safe-area-inset-top,0px)) 16px calc(30px + env(safe-area-inset-bottom,0px));
+  }
+  .wrap{max-width:760px;margin:0 auto;}
+  h1{font-size:1.35rem;line-height:1.3;margin:0 0 4px;font-weight:700;}
+  .sub{color:var(--muted);font-size:.85rem;margin-bottom:22px;}
+  .panel{
+    background:var(--glass); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    border:1px solid var(--glass-edge); border-radius:20px; padding:18px 20px; margin-bottom:18px;
+    box-shadow:0 10px 26px var(--shadow), inset 0 1px 0 rgba(255,255,255,.5);
+  }
+  .startBtn{
+    background:linear-gradient(180deg,var(--btn1),var(--btn2)); color:#fff; border:none;
+    border-radius:999px; padding:12px 26px; font-weight:700; font-size:1rem; cursor:pointer;
+    box-shadow:0 6px 14px var(--shadow), inset 0 1px 0 rgba(255,255,255,.6);
+  }
+  .startBtn:active{transform:translateY(1px);}
+  #status{margin-left:12px; color:var(--muted); font-size:.85rem;}
+  .rows{display:flex;flex-direction:column;gap:8px;margin-top:16px;}
+  .row{display:flex;align-items:center;gap:6px;overflow-x:auto;padding-bottom:2px;}
+  .rowlabel{flex:0 0 118px;font-size:.78rem;font-weight:700;}
+  .key{
+    flex:0 0 auto; min-width:36px; height:38px; display:flex;align-items:center;justify-content:center;
+    border-radius:10px; font-size:.78rem; font-weight:700; color:#0c2230; user-select:none; cursor:pointer;
+    box-shadow:inset 0 2px 0 rgba(255,255,255,.55), 0 2px 4px rgba(0,0,0,.15);
+    transition:transform .06s ease;
+  }
+  .key.active{transform:scale(1.14) translateY(-2px); box-shadow:0 0 14px currentColor, inset 0 2px 0 rgba(255,255,255,.7);}
+  .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px 20px;}
+  .ctrl label{display:block;font-size:.78rem;color:var(--muted);margin-bottom:5px;}
+  .ctrl input[type=range]{width:100%;}
+  .rec{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px;}
+  #recBtn{
+    background:#e0684f; color:#fff; border:none; border-radius:999px; padding:9px 20px;
+    font-weight:700; cursor:pointer; box-shadow:0 4px 10px var(--shadow);
+  }
+  #recBtn.recording{background:#8a2e1f;}
+  #recTime{font-variant-numeric:tabular-nums; color:var(--muted); font-size:.85rem;}
+  #dlLink{color:var(--btn2); font-weight:700; text-decoration:none; border-bottom:2px solid var(--btn1);}
+  .doc h2{font-size:1rem;margin:0 0 10px;}
+  .doc h3{font-size:.85rem;margin:14px 0 4px;color:var(--muted);}
+  .doc p, .doc li{font-size:.85rem;line-height:1.55;max-width:66ch;}
+  .doc ul{margin:4px 0;padding-left:20px;}
+  .doc textarea{
+    width:100%; min-height:80px; margin-top:6px; background:rgba(255,255,255,.5); color:var(--ink);
+    border:1px solid var(--glass-edge); border-radius:10px; padding:9px; font:inherit; font-size:.85rem;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Cinco materiales sonoros del segundo movimiento</h1>
+  <div class="sub"><em>The Dawn of Computer Music</em> — T. Feng, S. Kim, Y. Li (Stanford Laptop Orchestra, 2023). Instrumento web, Web Audio API nativo.</div>
+
+  <div class="panel">
+    <button class="startBtn" id="startBtn">▶ Iniciar audio</button>
+    <span id="status"></span>
+    <div class="rows" id="rows"></div>
+  </div>
+
+  <div class="panel">
+    <div class="controls" id="controls"></div>
+  </div>
+
+  <div class="panel">
+    <strong style="font-size:.9rem;">Render / grabación</strong>
+    <div class="rec">
+      <button id="recBtn">● Grabar</button>
+      <span id="recTime">00:00</span>
+      <a id="dlLink" style="display:none;" download>⬇ Descargar grabación</a>
+    </div>
+  </div>
+
+  <div class="panel doc">
+    <h2>Documentación</h2>
+    <p><strong>Entorno:</strong> HTML + JavaScript vanilla con Web Audio API nativo, sin librerías externas. Funciona en cualquier navegador actualizado (Chrome, Firefox, Safari, Edge); requiere un clic inicial para activar el audio.</p>
+
+    <h3>Qué controla cada parámetro</h3>
+    <ul>
+      <li><strong>Volumen general:</strong> ganancia maestra, se aplica en vivo.</li>
+      <li><strong>Silbido — vibrato:</strong> profundidad del LFO que modula la frecuencia del oscilador seno.</li>
+      <li><strong>Frutiger Aero — brillo:</strong> detune del oscilador secundario que da el brillo tipo campana/vidrio.</li>
+      <li><strong>Walkie-talkie — estática:</strong> Q del filtro pasa-banda sobre ruido; más alto = más silbido de radio.</li>
+      <li><strong>Tormenta — ráfaga:</strong> velocidad del LFO que mueve el corte del filtro pasa-bajos del ruido.</li>
+      <li><strong>Goteo — espacio:</strong> tiempo de delay/feedback aplicado al impacto de ruido filtrado.</li>
+    </ul>
+    <p style="font-size:.78rem;color:var(--muted);">Los sliders de textura afectan a las próximas notas que toques, no a las que ya están sonando.</p>
+
+    <h3>Mapa de teclado</h3>
+    <ul>
+      <li><strong>1 2 3 4 5 6 7 8 9 0</strong> → Silbidos (escala pentatónica, sostenido mientras se mantiene la tecla).</li>
+      <li><strong>Q W E R T Y U I O P</strong> → Campanas "Frutiger Aero" (escala mayor, un disparo por tecla).</li>
+      <li><strong>A S D F G H J K L</strong> → Estática walkie-talkie (sostenida mientras se mantiene).</li>
+      <li><strong>Z X C V B N M</strong> → Viento / tormenta, intensidad creciente (sostenida mientras se mantiene).</li>
+      <li><strong>Barra espaciadora</strong> → Goteo (un disparo aleatorio por pulsación).</li>
+    </ul>
+
+    <h3>Cómo producir el render de 30–90 s</h3>
+    <ul>
+      <li>Click en "Iniciar audio", luego click en "Grabar".</li>
+      <li>Tocar combinando las cinco texturas durante 30 a 90 segundos.</li>
+      <li>Click en "Detener" y bajar el archivo con "Descargar grabación".</li>
+    </ul>
+
+    <h3>Rol en la obra (borrador — edita según tu análisis)</h3>
+    <p>Estas cinco texturas sintetizan el paisaje sonoro nostálgico-digital del segundo movimiento: silbidos como hilo melódico, la campana "Frutiger Aero" como brillo decorativo, la estática de walkie-talkie y el lecho de viento/tormenta como ambiente, y el goteo como puntuación. Podrían usarse superpuestas en la sección central del movimiento, entrando y saliendo de forma similar a como aparecen en la grabación original.</p>
+    <textarea placeholder="Ajusta aquí tu propia descripción del rol de este material y en qué sección de la obra lo usarías..."></textarea>
+  </div>
+</div>
+
+<script>
+(() => {
+const KEY_ROWS = [
+  {id:'whistle', label:'Silbidos', color:'var(--whistle)',
+   keys:['Digit1','Digit2','Digit3','Digit4','Digit5','Digit6','Digit7','Digit8','Digit9','Digit0'],
+   glyphs:['1','2','3','4','5','6','7','8','9','0']},
+  {id:'bell', label:'Frutiger Aero', color:'var(--bell)',
+   keys:['KeyQ','KeyW','KeyE','KeyR','KeyT','KeyY','KeyU','KeyI','KeyO','KeyP'],
+   glyphs:['Q','W','E','R','T','Y','U','I','O','P']},
+  {id:'walkie', label:'Walkie-talkie', color:'var(--walkie)',
+   keys:['KeyA','KeyS','KeyD','KeyF','KeyG','KeyH','KeyJ','KeyK','KeyL'],
+   glyphs:['A','S','D','F','G','H','J','K','L']},
+  {id:'storm', label:'Viento / tormenta', color:'var(--storm)',
+   keys:['KeyZ','KeyX','KeyC','KeyV','KeyB','KeyN','KeyM'],
+   glyphs:['Z','X','C','V','B','N','M']},
+  {id:'drip', label:'Goteo', color:'var(--drip)', keys:['Space'], glyphs:['␣ espacio']},
+];
+
+let ctx, master, recDest, recorder, chunks=[], recStart, noiseBuf;
+const active = new Map();
+const params = {
+  vol:0.7, whistleVibDepth:6, whistleVibRate:5,
+  bellShimmer:8, bellDecay:1.2, walkieStatic:14, walkieSquelch:9,
+  stormGust:0.3, dripSpace:0.18,
+};
+
+const pentatonic=[60,63,65,67,70,72,75,77,79,82];
+const majorScale=[60,62,64,65,67,69,71,72,74,76];
+const walkieBands=[500,650,800,950,1100,1300,1500,1750,2000];
+const stormCutoffs=[300,450,650,900,1300,1900,2800];
+const midiToFreq=m=>440*Math.pow(2,(m-69)/12);
+
+function makeNoise(seconds){
+  const n=ctx.sampleRate*seconds;
+  const buf=ctx.createBuffer(1,n,ctx.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<n;i++) d[i]=Math.random()*2-1;
+  return buf;
+}
+
+function init(){
+  ctx=new (window.AudioContext||window.webkitAudioContext)();
+  master=ctx.createGain(); master.gain.value=params.vol; master.connect(ctx.destination);
+  recDest=ctx.createMediaStreamDestination(); master.connect(recDest);
+  noiseBuf=makeNoise(2);
+}
+
+function startWhistle(code, idx){
+  const freq=midiToFreq(pentatonic[idx]);
+  const osc=ctx.createOscillator(); osc.type='sine'; osc.frequency.value=freq;
+  const vib=ctx.createOscillator(); vib.frequency.value=params.whistleVibRate;
+  const vibGain=ctx.createGain(); vibGain.gain.value=params.whistleVibDepth;
+  vib.connect(vibGain); vibGain.connect(osc.frequency);
+  const g=ctx.createGain(); g.gain.value=0;
+  osc.connect(g); g.connect(master);
+  osc.start(); vib.start();
+  const now=ctx.currentTime;
+  g.gain.linearRampToValueAtTime(0.22, now+0.12);
+  active.set(code, ()=>{
+    const t=ctx.currentTime;
+    g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value,t);
+    g.gain.linearRampToValueAtTime(0, t+0.25);
+    osc.stop(t+0.3); vib.stop(t+0.3);
+  });
+}
+
+function playBell(idx){
+  const freq=midiToFreq(majorScale[idx]+12);
+  const now=ctx.currentTime;
+  const o1=ctx.createOscillator(); o1.type='sine'; o1.frequency.value=freq;
+  const o2=ctx.createOscillator(); o2.type='triangle'; o2.frequency.value=freq*2.005;
+  o2.detune.value=params.bellShimmer*4;
+  const g1=ctx.createGain(), g2=ctx.createGain(); g1.gain.value=0.25; g2.gain.value=0.12;
+  const delay=ctx.createDelay(1); delay.delayTime.value=0.18;
+  const fb=ctx.createGain(); fb.gain.value=0.25; delay.connect(fb); fb.connect(delay);
+  const env=ctx.createGain(); env.gain.setValueAtTime(0.001,now);
+  env.gain.exponentialRampToValueAtTime(0.5, now+0.01);
+  env.gain.exponentialRampToValueAtTime(0.001, now+params.bellDecay);
+  o1.connect(g1); o2.connect(g2); g1.connect(env); g2.connect(env);
+  env.connect(master); env.connect(delay); delay.connect(master);
+  o1.start(); o2.start(); o1.stop(now+params.bellDecay+0.2); o2.stop(now+params.bellDecay+0.2);
+}
+
+function startWalkie(code, idx){
+  const src=ctx.createBufferSource(); src.buffer=noiseBuf; src.loop=true;
+  const bp=ctx.createBiquadFilter(); bp.type='bandpass';
+  bp.frequency.value=walkieBands[idx%walkieBands.length]; bp.Q.value=params.walkieStatic;
+  const squelch=ctx.createOscillator(); squelch.type='square'; squelch.frequency.value=params.walkieSquelch;
+  const squelchGain=ctx.createGain(); squelchGain.gain.value=0.4;
+  const g=ctx.createGain(); g.gain.setValueAtTime(0.3, ctx.currentTime);
+  squelch.connect(squelchGain); squelchGain.connect(g.gain);
+  src.connect(bp); bp.connect(g); g.connect(master);
+  src.start(); squelch.start();
+  active.set(code, ()=>{
+    const t=ctx.currentTime;
+    g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value,t);
+    g.gain.linearRampToValueAtTime(0,t+0.04);
+    src.stop(t+0.06); squelch.stop(t+0.06);
+  });
+}
+
+function startStorm(code, idx){
+  const src=ctx.createBufferSource(); src.buffer=noiseBuf; src.loop=true;
+  const lp=ctx.createBiquadFilter(); lp.type='lowpass';
+  const base=stormCutoffs[idx%stormCutoffs.length]; lp.frequency.value=base;
+  const gust=ctx.createOscillator(); gust.type='sine'; gust.frequency.value=0.15+params.stormGust;
+  const gustGain=ctx.createGain(); gustGain.gain.value=base*0.5;
+  gust.connect(gustGain); gustGain.connect(lp.frequency);
+  const g=ctx.createGain(); g.gain.value=0;
+  src.connect(lp); lp.connect(g); g.connect(master);
+  src.start(); gust.start();
+  const now=ctx.currentTime;
+  g.gain.linearRampToValueAtTime(0.3, now+0.4);
+  active.set(code, ()=>{
+    const t=ctx.currentTime;
+    g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value,t);
+    g.gain.linearRampToValueAtTime(0,t+0.5);
+    src.stop(t+0.6); gust.stop(t+0.6);
+  });
+}
+
+function playDrip(){
+  const now=ctx.currentTime;
+  const src=ctx.createBufferSource(); src.buffer=noiseBuf;
+  const bp=ctx.createBiquadFilter(); bp.type='bandpass'; bp.Q.value=8;
+  const startF=1800+Math.random()*800, endF=300+Math.random()*200;
+  bp.frequency.setValueAtTime(startF, now);
+  bp.frequency.exponentialRampToValueAtTime(endF, now+0.15);
+  const g=ctx.createGain(); g.gain.setValueAtTime(0.001, now);
+  g.gain.exponentialRampToValueAtTime(0.4, now+0.01);
+  g.gain.exponentialRampToValueAtTime(0.001, now+0.2);
+  const delay=ctx.createDelay(1); delay.delayTime.value=params.dripSpace;
+  const fb=ctx.createGain(); fb.gain.value=0.3; delay.connect(fb); fb.connect(delay);
+  src.connect(bp); bp.connect(g); g.connect(master); g.connect(delay); delay.connect(master);
+  src.start(now); src.stop(now+0.3);
+}
+
+function findRow(code){ return KEY_ROWS.find(r=>r.keys.includes(code)); }
+function highlightKey(code,on){
+  const el=document.querySelector(`.key[data-code="${code}"]`);
+  if(el) el.classList.toggle('active',on);
+}
+function pressCode(code){
+  if(!ctx) return;
+  if(ctx.state==='suspended') ctx.resume();
+  const row=findRow(code); if(!row) return;
+  highlightKey(code,true);
+  if(active.has(code)) return;
+  const idx=row.keys.indexOf(code);
+  if(row.id==='whistle') startWhistle(code,idx);
+  else if(row.id==='bell') playBell(idx);
+  else if(row.id==='walkie') startWalkie(code,idx);
+  else if(row.id==='storm') startStorm(code,idx);
+  else if(row.id==='drip') playDrip();
+}
+function releaseCode(code){
+  highlightKey(code,false);
+  const cleanup=active.get(code);
+  if(cleanup){ cleanup(); active.delete(code); }
+}
+
+document.addEventListener('keydown', e=>{
+  if(!findRow(e.code)) return;
+  e.preventDefault();
+  if(e.repeat) return;
+  pressCode(e.code);
+});
+document.addEventListener('keyup', e=>{
+  if(!findRow(e.code)) return;
+  releaseCode(e.code);
+});
+
+function buildUI(){
+  const rowsEl=document.getElementById('rows');
+  KEY_ROWS.forEach(row=>{
+    const r=document.createElement('div'); r.className='row';
+    const label=document.createElement('div'); label.className='rowlabel';
+    label.textContent=row.label; label.style.color=row.color;
+    r.appendChild(label);
+    row.keys.forEach((code,i)=>{
+      const k=document.createElement('div'); k.className='key'; k.dataset.code=code;
+      k.style.background=row.color; k.textContent=row.glyphs[i];
+      k.addEventListener('mousedown', ()=>pressCode(code));
+      k.addEventListener('mouseup', ()=>releaseCode(code));
+      k.addEventListener('mouseleave', ()=>releaseCode(code));
+      k.addEventListener('touchstart', ev=>{ev.preventDefault(); pressCode(code);}, {passive:false});
+      k.addEventListener('touchend', ev=>{ev.preventDefault(); releaseCode(code);}, {passive:false});
+      r.appendChild(k);
+    });
+    rowsEl.appendChild(r);
+  });
+
+  const controlsEl=document.getElementById('controls');
+  const sliders=[
+    ['Volumen general','vol',0,1,0.01, v=>{ if(master) master.gain.value=v; }],
+    ['Silbido — vibrato','whistleVibDepth',0,20,1, null],
+    ['Frutiger Aero — brillo','bellShimmer',0,20,1, null],
+    ['Walkie-talkie — estática','walkieStatic',2,30,1, null],
+    ['Tormenta — ráfaga','stormGust',0,1,0.02, null],
+    ['Goteo — espacio','dripSpace',0.02,0.5,0.01, null],
+  ];
+  sliders.forEach(([label,key,min,max,step,cb])=>{
+    const wrap=document.createElement('div'); wrap.className='ctrl';
+    const l=document.createElement('label'); l.textContent=label;
+    const input=document.createElement('input'); input.type='range';
+    input.min=min; input.max=max; input.step=step; input.value=params[key];
+    input.addEventListener('input', ()=>{ params[key]=parseFloat(input.value); if(cb) cb(params[key]); });
+    wrap.appendChild(l); wrap.appendChild(input);
+    controlsEl.appendChild(wrap);
+  });
+}
+buildUI();
+
+document.getElementById('startBtn').addEventListener('click', ()=>{
+  if(!ctx) init();
+  ctx.resume();
+  document.getElementById('status').textContent='Audio listo — usa el teclado o haz clic en las teclas';
+});
+
+const recBtn=document.getElementById('recBtn');
+const dlLink=document.getElementById('dlLink');
+const recTime=document.getElementById('recTime');
+let timerInt;
+recBtn.addEventListener('click', ()=>{
+  if(!ctx){ init(); }
+  ctx.resume();
+  if(!recorder || recorder.state==='inactive'){
+    chunks=[];
+    recorder=new MediaRecorder(recDest.stream);
+    recorder.ondataavailable=e=>chunks.push(e.data);
+    recorder.onstop=()=>{
+      const mime=recorder.mimeType||'audio/webm';
+      const ext=mime.includes('mp4')?'m4a':'webm';
+      const blob=new Blob(chunks,{type:mime});
+      dlLink.href=URL.createObjectURL(blob);
+      dlLink.download=`dawn-computer-music-material.${ext}`;
+      dlLink.style.display='inline';
+      clearInterval(timerInt);
+    };
+    recorder.start();
+    recStart=Date.now();
+    timerInt=setInterval(()=>{
+      const s=Math.floor((Date.now()-recStart)/1000);
+      recTime.textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+    },250);
+    recBtn.textContent='■ Detener'; recBtn.classList.add('recording');
+    dlLink.style.display='none';
+  } else {
+    recorder.stop();
+    recBtn.textContent='● Grabar'; recBtn.classList.remove('recording');
+  }
+});
+})();
+</script>
+</body>
+</html>

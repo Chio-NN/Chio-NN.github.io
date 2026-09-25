@@ -1,0 +1,47 @@
+
+
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>http://localhost:4000/</id>
+  <title>RNN</title>
+  <subtitle>A minimal, responsive and feature-rich Jekyll theme for technical writing.</subtitle>
+  <updated>2026-09-25T06:29:43-03:00</updated>
+  <author>
+    <name>your_full_name</name>
+    <uri>http://localhost:4000/</uri>
+  </author>
+  <link rel="self" type="application/atom+xml" href="http://localhost:4000/feed.xml"/>
+  <link rel="alternate" type="text/html" hreflang="en"
+    href="http://localhost:4000/"/>
+  <generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator>
+  <rights> © 2026 your_full_name </rights>
+  <icon>/assets/img/favicons/favicon.ico</icon>
+  <logo>/assets/img/favicons/favicon-96x96.png</logo>
+
+
+  
+  <entry>
+    <title>T1</title>
+    <link href="http://localhost:4000/posts/T1/" rel="alternate" type="text/html" title="T1" />
+    <published>2026-09-24T21:00:00-03:00</published>
+  
+    <updated>2026-09-24T21:00:00-03:00</updated>
+  
+    <id>http://localhost:4000/posts/T1/</id>
+    <content type="text/html" src="http://localhost:4000/posts/T1/" />
+    <author>
+      <name>your_full_name</name>
+    </author>
+
+  
+    
+    <category term="Orquesta de Laptops" />
+    
+  
+
+  <summary>Referente 1, In C “In C” de Terry Riley Qué hace En la obra “In C” (1) se escuchan diferentes compases en bucle interpretados por una mezcla de instrumentos musicales clásicos, electrónicos y laptops. Estos 53 compases, o patrones, diferentes son tocados en orden siguiendo varias reglas escritas por el compositor pero también dejando varias libertades a los intérpretes. Por ejemplo, se le da la...</summary>
+
+  </entry>
+
+</feed>
+
+
