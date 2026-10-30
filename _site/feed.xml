@@ -2,9 +2,9 @@
 
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://localhost:4000/</id>
-  <title>RNN</title>
-  <subtitle>A minimal, responsive and feature-rich Jekyll theme for technical writing.</subtitle>
-  <updated>2026-09-25T06:29:43-03:00</updated>
+  <title>ROCÍO NAVAS NERVI</title>
+  <subtitle>Orquesta de Laptops UC</subtitle>
+  <updated>2026-10-29T21:12:57-03:00</updated>
   <author>
     <name>your_full_name</name>
     <uri>http://localhost:4000/</uri>
@@ -24,7 +24,7 @@
     <link href="http://localhost:4000/posts/T1/" rel="alternate" type="text/html" title="T1" />
     <published>2026-09-24T21:00:00-03:00</published>
   
-    <updated>2026-09-24T21:00:00-03:00</updated>
+    <updated>2026-10-29T19:15:07-03:00</updated>
   
     <id>http://localhost:4000/posts/T1/</id>
     <content type="text/html" src="http://localhost:4000/posts/T1/" />
