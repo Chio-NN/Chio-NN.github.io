@@ -4,7 +4,7 @@
   <id>http://localhost:4000/</id>
   <title>ROCÍO NAVAS NERVI</title>
   <subtitle>Orquesta de Laptops UC</subtitle>
-  <updated>2026-10-29T21:12:57-03:00</updated>
+  <updated>2026-10-30T02:42:02-03:00</updated>
   <author>
     <name>your_full_name</name>
     <uri>http://localhost:4000/</uri>
@@ -20,11 +20,35 @@
 
   
   <entry>
+    <title>T2</title>
+    <link href="http://localhost:4000/posts/T2/" rel="alternate" type="text/html" title="T2" />
+    <published>2026-10-29T18:00:00-03:00</published>
+  
+    <updated>2026-10-29T18:00:00-03:00</updated>
+  
+    <id>http://localhost:4000/posts/T2/</id>
+    <content type="text/html" src="http://localhost:4000/posts/T2/" />
+    <author>
+      <name>your_full_name</name>
+    </author>
+
+  
+    
+    <category term="Orquesta de Laptops" />
+    
+  
+
+  <summary>Parte 1: La fuente  1.1 La grabación    Descargar gibon_original.wav · WAV PCM, 48 kHz, 16 bit, mono · 1,302 s · pico −4,2 dBFS (sin saturación) · sonoridad integrada −14,1 LUFS  Grabé este audio en Zoológico Nacional ubicado en Parquemet junto a mi polola utilizando mi teléfono Samsung S24 el jueves 15 de octubre al pasear por el recinto de los gibones. El audio es un fragmento de un canto de ...</summary>
+
+  </entry>
+
+  
+  <entry>
     <title>T1</title>
     <link href="http://localhost:4000/posts/T1/" rel="alternate" type="text/html" title="T1" />
     <published>2026-09-24T21:00:00-03:00</published>
   
-    <updated>2026-10-29T19:15:07-03:00</updated>
+    <updated>2026-10-29T21:14:44-03:00</updated>
   
     <id>http://localhost:4000/posts/T1/</id>
     <content type="text/html" src="http://localhost:4000/posts/T1/" />

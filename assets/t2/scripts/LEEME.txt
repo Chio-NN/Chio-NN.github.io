@@ -1,0 +1,19 @@
+# Scripts de análisis y render
+
+Herramientas: Python 3 (NumPy, SciPy 1.18, Matplotlib 3.11) para el análisis y las figuras; Node + Playwright (Chromium 153) para renderizar los modelos web sin tiempo real; ffmpeg (filtro ebur128) para verificar la sonoridad.
+Escritos con ayuda de Claude (Anthropic). Se ejecutaron desde una carpeta con `gibon_original_recortado.wav`, `silbido.wav`, `analisis/`, `render/`, `figuras/` y `sitio/`.
+
+| Script | Qué hace |
+| --- | --- |
+| 01_trayectoria_f0_stft.py | f0 por pico del espectro (STFT Hann 2048, interpolación parabólica) |
+| 02_armonicos_envolvente.py | Nivel de los armónicos 1–12 y del ruido entre armónicos cada 10 ms (ventana 40 ms); envolvente RMS |
+| 03_f0_hilbert_y_pulsos.py | f0 instantánea (pasa bajos 1130 Hz + transformada de Hilbert); tasa de los pulsos (espectro de la envolvente) |
+| 04_puntos_de_quiebre_partitura.py | Simplifica los contornos medidos a puntos de quiebre (algoritmo Ramer-Douglas-Peucker) |
+| 05_figuras_parte1.py | Figuras 01 a 06 |
+| medir.py, lufs.py | Funciones de medición; sonoridad integrada según ITU-R BS.1770-4 |
+| 06_igualar_sonoridad.py | Lleva original, aditiva y FM a −23 LUFS con una ganancia fija |
+| 07_figuras_comparacion.py | Figuras 10 a 12 |
+| 08_figura_prueba_escucha.py, 09_figura_gibon_silbido_fm.py | Figuras 13 y 14 |
+| render_modelos.js | Abre las páginas y exporta los WAV con el mismo código que el botón «Exportar WAV» |
+| prueba_cadena_escucha.js | Pasa el silbido grabado por el modo en vivo (micrófono simulado) |
+| fuente_de_las_paginas/ | Código fuente de las páginas; `construir.py` arma los HTML autocontenidos |

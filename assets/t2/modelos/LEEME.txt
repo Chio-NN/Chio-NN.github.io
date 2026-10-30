@@ -1,0 +1,22 @@
+# T2 · Métodos de síntesis — llamada de gibón
+
+IEE2003 Orquesta de Laptops UC. Dos modelos de síntesis de una llamada de gibón (1,302 s), en HTML + Web Audio API. Cada página es un único archivo autocontenido: no necesita internet ni librerías.
+
+| Archivo | Qué es |
+| --- | --- |
+| `index.html` | Portada con enlaces |
+| `aditiva.html` | Modelo A · Síntesis aditiva (senos por armónico + ruido en pasa banda) |
+| `fm.html` | Modelo B · Síntesis FM (pasa altos, pasa bajos y convolución) + modo en vivo de la Parte 4 |
+
+## Cómo usarlo
+1. Abre la página en Chrome (doble clic en el archivo o el enlace de GitHub Pages). Usa audífonos.
+2. «Tocar» suena en tiempo real; «Exportar WAV» genera el mismo sonido como archivo (48 kHz, 16 bit, mono).
+3. Para reproducir un audio entregado: pega sus ajustes JSON en «Ajustes actuales», pulsa «Aplicar ajustes» y exporta. El resultado es idéntico (el ruido usa semilla fija).
+4. Parte 4: en `fm.html`, «Activar micrófono», silba y graba la toma (WAV estéreo: L = micrófono, R = modelo).
+
+## Ajustes de los audios entregados
+- `aditiva_gibon.wav`: `{"f0":830,"contorno":100,"estirar":1,"pulsos":70,"tasa":1,"armonicos":10,"brillo":-36,"oscurecer":12,"ruido":-39}`
+- `fm_gibon.wav`: `{"f0":830,"contorno":100,"estirar":1,"pulsos":70,"tasa":1,"razon":1,"indice":0.18,"corte":12000,"reverb":8}`
+
+## Entorno
+Probado en Chromium 153 (Linux). Web Audio API nativa: `OscillatorNode`, `GainNode`, `BiquadFilterNode`, `ConvolverNode`, `AudioWorkletNode` (modo en vivo) y `OfflineAudioContext` (exportación).
